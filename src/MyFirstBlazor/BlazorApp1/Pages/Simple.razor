@@ -1,0 +1,50 @@
+﻿@page  "/simple"
+@using System.Globalization
+
+<h3>Simple</h3>
+
+<button class="btn btn-primary" @onclick="WriteData">Write data</button>
+<button class="btn btn-primary" @onclick="ClearData" disabled="@BtnDisable">Clear data</button>
+
+
+
+        <p>
+            <b>@messageText</b>
+        </p>
+
+        @foreach (var item in _data)
+        {
+            <p>
+                <b class="text-muted">@item</b>
+            </p>
+        }
+
+        @code {
+            private string messageText;
+            private bool BtnDisable { get => !_data.Any();  }
+
+           
+
+
+            readonly List<string> _data = new List<string>();
+
+            void WriteData()
+            {
+
+                _data.Clear();
+
+                for (var i = 0; i < 100; i++)
+                {
+                    _data.Add(DateTime.Now.AddMinutes(i).ToString(CultureInfo.InvariantCulture));
+                }
+                StateHasChanged();
+            }
+
+            void ClearData()
+            {
+                _data.Clear();
+                StateHasChanged();
+
+            }
+
+        }
