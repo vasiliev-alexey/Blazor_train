@@ -1,7 +1,106 @@
 ﻿@page "/"
+@using PizzaSPA.Shared
 
-<h1>Hello, world!</h1>
+<h1>Магазин Пиццы</h1>
 
-Welcome to your new app.
+@* Новое приложене на Blazor *@
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
+@foreach (var pizza  in State.Menu.Pizzas)
+{
+    <div class="row h6">
+        <div class="col">
+            @pizza.Name
+        </div>
+
+        <div class="col">
+            @pizza.Price
+        </div>
+
+        <div class="col">
+            <img width="32" height="32" src="@SpicinessImage(pizza.Spiciness)" alt="@pizza.Spiciness"/>
+        </div>
+
+        <div class="col">
+            <button class="btn btn-success" @onclick="@(() => AddToBasket(pizza))">Добавить в корзину</button>
+                    </div>
+
+
+                    </div>
+}
+                    <!-- В корзине заказов-->
+                    @if (State.Basket.Orders.Any())
+                    {
+                        <h1>Корзина заказа</h1>
+
+                        @foreach (var (pizza, pos) in State.Basket.Orders.Select((id, pos) => (State.Menu.GetPizza(id) , pos)))
+                        {
+                            <div class="row h6">
+                                <div class="col">
+                                    @pizza.Name
+                                </div>
+
+                                <div class="col">
+                                    @pizza.Price
+                                </div>
+
+
+                                <div class="col">
+                                    <button class="btn btn-danger" @onclick="@(() => RemoveFromBasket(pos))">Удалить из корзины</button>
+                                            </div>
+
+
+                                            </div>
+                        }
+                    }
+
+    <!-- Итого -->
+                                            <div class="row h6">
+                                                <div class="col">
+                                                    Всего
+                                                </div>
+
+                                                <div class="col">
+                                                    @State.TotalPrice
+                                                </div>
+
+                                            <div class="col"> </div>
+                                    
+
+                                                            </div>
+
+                                            @functions
+                                            {
+
+                                                private State State { get; } =
+                                                    new State
+                                                    {
+                                                        Menu = new Menu
+                                                        {
+                                                            Pizzas = new List<Pizza>
+                                                            {
+                                                                new Pizza(1, @"Пипперони", 500, Spiciness.Spicy),
+                                                                new Pizza(2, "Маргарита", 600, Spiciness.Hot),
+                                                                new Pizza(3, "Диабло", 700, Spiciness.Hot)
+                                                            }
+                                                        }
+                                                    };
+
+                                                private string SpicinessImage(Spiciness spiciness)
+                                                {
+                                                    return $"images/{spiciness.ToString().ToLower()}.png";
+                                                }
+
+                                                private void AddToBasket(Pizza pizza)
+                                                {
+                                                    Console.WriteLine($"Added pizza to basket {pizza.Name}");
+                                                    State.Basket.Add(pizza.Id);
+                                                }
+
+                                                private void RemoveFromBasket(int pos)
+                                                {
+                                                    Console.WriteLine($"Removed pizza from basket at pos {pos}");
+                                                    State.Basket.Remove(pos);
+                                                }
+
+                                            }

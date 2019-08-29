@@ -1,4 +1,6 @@
-﻿namespace PizzaSPA.Shared
+﻿using System.Linq;
+
+namespace PizzaSPA.Shared
 {
     public class State
     {
@@ -6,7 +8,6 @@
         public Basket Basket { get; set; } = new Basket();
 
         public Ui Ui { get; set; } = new Ui();
-
-
+        public decimal TotalPrice => Basket.Orders.Sum(_ => Menu.GetPizza(_).Price);
     }
 }

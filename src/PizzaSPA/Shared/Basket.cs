@@ -9,5 +9,15 @@ namespace PizzaSPA.Shared
         public List<int> Orders { get; set; } = new List<int>();
 
         public bool HasPaid { get; set; } = false;
+
+        public void Add(int pizzaId)
+        {
+             Orders.Add(pizzaId);
+        }
+
+        public void Remove(int pos)
+        {
+            Orders.RemoveAt(pos);
+        }
     }
 }

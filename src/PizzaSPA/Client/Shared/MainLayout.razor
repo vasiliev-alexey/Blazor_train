@@ -1,15 +1,29 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="sidebar">
+<div class="sidebar" hidden="@IsHiden">
     <NavMenu />
 </div>
 
 <div class="main">
     <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+        <button   @onclick="@(()=>click())">Навигация</button>
     </div>
 
     <div class="content px-4">
         @Body
     </div>
 </div>
+
+
+@functions
+{
+
+    private bool IsHiden = true;
+
+
+    private void click()
+    {
+        IsHiden = !IsHiden;
+    }
+
+}
