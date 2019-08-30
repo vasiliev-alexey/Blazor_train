@@ -1,0 +1,21 @@
+﻿@page "/alert"
+
+<h1>Тест сообщения</h1>
+
+<Alert Show="@ShowAlert">
+    <span class="oi oi-check mr-2" aria-hidden="true"></span>
+    <span>Алерт из Blazor</span>
+</Alert>
+
+<button class="btn btn-default" @onclick="@ToggleAlert">Скрыть\показать</button>
+
+
+        @code {
+            public bool ShowAlert { get; set; } = true;
+
+            public void ToggleAlert()
+            {
+                ShowAlert = !ShowAlert;
+            }
+
+        }
