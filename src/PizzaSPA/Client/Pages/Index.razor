@@ -1,106 +1,176 @@
 ﻿@page "/"
+@using System.ComponentModel.Design
 @using PizzaSPA.Shared
 
 <h1>Магазин Пиццы</h1>
 
 @* Новое приложене на Blazor *@
 
+<div class="d-flex flex-column">
+    @foreach (var pizza in State.Menu.Pizzas)
+    {
+        <div class="row h6">
+            <div class="col">
+                @pizza.Name
+            </div>
 
-@foreach (var pizza  in State.Menu.Pizzas)
+            <div class="col">
+                @pizza.Price
+            </div>
+
+            <div class="col">
+                <img width="32" height="32" src="@SpicinessImage(pizza.Spiciness)" alt="@pizza.Spiciness" />
+            </div>
+
+            <div class="col">
+                <button class="btn btn-success" @onclick="@(() => AddToBasket(pizza))">Добавить в корзину</button>
+            </div>
+
+
+        </div>
+    }
+</div>
+<!-- В корзине заказов-->
+@if (State.Basket.Orders.Any())
 {
-    <div class="row h6">
-        <div class="col">
-            @pizza.Name
+    <h1>Корзина заказа</h1>
+
+    @foreach (var (pizza, pos) in State.Basket.Orders.Select((id, pos) => (State.Menu.GetPizza(id), pos)))
+    {
+        <div class="row h6">
+            <div class="col">
+                @pizza.Name
+            </div>
+
+            <div class="col">
+                @pizza.Price
+            </div>
+
+
+            <div class="col">
+                <button class="btn btn-danger" @onclick="@(() => RemoveFromBasket(pos))">Удалить из корзины</button>
+            </div>
+
+
         </div>
-
-        <div class="col">
-            @pizza.Price
-        </div>
-
-        <div class="col">
-            <img width="32" height="32" src="@SpicinessImage(pizza.Spiciness)" alt="@pizza.Spiciness"/>
-        </div>
-
-        <div class="col">
-            <button class="btn btn-success" @onclick="@(() => AddToBasket(pizza))">Добавить в корзину</button>
-                    </div>
-
-
-                    </div>
+    }
 }
-                    <!-- В корзине заказов-->
-                    @if (State.Basket.Orders.Any())
-                    {
-                        <h1>Корзина заказа</h1>
-
-                        @foreach (var (pizza, pos) in State.Basket.Orders.Select((id, pos) => (State.Menu.GetPizza(id) , pos)))
-                        {
-                            <div class="row h6">
-                                <div class="col">
-                                    @pizza.Name
-                                </div>
-
-                                <div class="col">
-                                    @pizza.Price
-                                </div>
+<!-- Итого -->
+<div class="row h4">
+    <div class="col">
+        Всего
+    </div>
+    <div class="col">
+        @State.TotalPrice
+    </div>
+    <div class="col"> </div>
+</div>
+<!-- Данные о клиенте -->
 
 
-                                <div class="col">
-                                    <button class="btn btn-danger" @onclick="@(() => RemoveFromBasket(pos))">Удалить из корзины</button>
-                                            </div>
+<h1>Данные о клиенте</h1>
+<fieldset class="d-flex flex-column">
+    <p>
+        <label for="name">Имя:</label>
+        <input id="name" @bind="@State.Basket.Customer.Name" />
+
+        @if (State.Basket.Customer.GetErrors(nameof(Customer.Name)).Any())
+        {
+        <ul class="validation-error">
+            @foreach (var error in State.Basket.Customer.GetErrors(nameof(Customer.Name)))
+            {
+                    <li>@error></li>
+            }
+        </ul>
+        }
+
+    </p>
+    <p>
+        <label for="street">Улица:</label>
+        <input id="street" @bind="@State.Basket.Customer.Street" />
+               @if (State.Basket.Customer.GetErrors(nameof(Customer.Street)).Any())
+               {
+                   <ul class="validation-error">
+                       @foreach (var error in State.Basket.Customer.GetErrors(nameof(Customer.Street)))
+                       {
+                           <li>@error></li>
+                       }
+                   </ul>
+               }
+    </p>
+    <p>
+        <label for="city">Город:</label>
+        <input id="city" @bind="@State.Basket.Customer.City" />
+               @if (State.Basket.Customer.GetErrors(nameof(Customer.City)).Any())
+               {
+                   <ul class="validation-error">
+                       @foreach (var error in State.Basket.Customer.GetErrors(nameof(Customer.City)))
+                       {
+                           <li>@error></li>
+                       }
+                   </ul>
+               }
+    </p>
 
 
-                                            </div>
-                        }
-                    }
+</fieldset>
 
-    <!-- Итого -->
-                                            <div class="row h6">
-                                                <div class="col">
-                                                    Всего
-                                                </div>
+@if (State.Basket.Orders.Any())
+{
+    <button class="btn btn-info" @onclick="@PlaceOrder">Разместить заказ</button>
+}
 
-                                                <div class="col">
-                                                    @State.TotalPrice
-                                                </div>
+@if (debug)
+{
+    <p>@State.ToJson()</p>
+}
 
-                                            <div class="col"> </div>
-                                    
 
-                                                            </div>
-
-                                            @functions
+@functions
                                             {
+    private bool debug =
+#if DEBUG
+        true;
+#else
+    false;
+#endif
 
-                                                private State State { get; } =
-                                                    new State
-                                                    {
-                                                        Menu = new Menu
-                                                        {
-                                                            Pizzas = new List<Pizza>
-                                                            {
+
+    private State State { get; } =
+        new State
+        {
+            Menu = new Menu
+            {
+                Pizzas = new List<Pizza>
+                {
                                                                 new Pizza(1, @"Пипперони", 500, Spiciness.Spicy),
                                                                 new Pizza(2, "Маргарита", 600, Spiciness.Hot),
                                                                 new Pizza(3, "Диабло", 700, Spiciness.Hot)
-                                                            }
-                                                        }
-                                                    };
+                    }
+            }
+        };
 
-                                                private string SpicinessImage(Spiciness spiciness)
-                                                {
-                                                    return $"images/{spiciness.ToString().ToLower()}.png";
-                                                }
+    private string SpicinessImage(Spiciness spiciness)
+    {
+        return $"images/{spiciness.ToString().ToLower()}.png";
+    }
 
-                                                private void AddToBasket(Pizza pizza)
-                                                {
-                                                    Console.WriteLine($"Added pizza to basket {pizza.Name}");
-                                                    State.Basket.Add(pizza.Id);
-                                                }
+    private void AddToBasket(Pizza pizza)
+    {
+        Console.WriteLine($"Added pizza to basket {pizza.Name}");
+        State.Basket.Add(pizza.Id);
+    }
 
-                                                private void RemoveFromBasket(int pos)
-                                                {
-                                                    Console.WriteLine($"Removed pizza from basket at pos {pos}");
-                                                    State.Basket.Remove(pos);
-                                                }
+    private void RemoveFromBasket(int pos)
+    {
+        Console.WriteLine($"Removed pizza from basket at pos {pos}");
+        State.Basket.Remove(pos);
+    }
 
-                                            }
+    private void PlaceOrder()
+    {
+        Console.WriteLine("Заказ размещен");
+
+    }
+
+}

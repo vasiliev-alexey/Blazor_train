@@ -4,7 +4,7 @@ namespace PizzaSPA.Shared
 {
     public class Basket
     {
-        private Customer Customer { get; set; } = new Customer();
+        public Customer Customer { get; set; } = new Customer();
 
         public List<int> Orders { get; set; } = new List<int>();
 
