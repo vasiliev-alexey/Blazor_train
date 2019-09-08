@@ -1,0 +1,18 @@
+﻿@using PizzaSPA.Shared
+
+<h1>@Title</h1>
+@foreach (var pizza in Menu.Pizzas)
+{
+    <PizzaItem Pizza="@pizza" ButtonTitle="Заказать"
+               ButtonClass="btn btn-success"
+               Selected="@((p) => Selected(p))" />
+}
+
+@code {
+[Parameter]
+public string Title { get; set; }
+[Parameter]
+public Menu Menu { get; set; }
+[Parameter]
+public Action <Pizza> Selected { get; set; }
+    }

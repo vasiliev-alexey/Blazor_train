@@ -7,66 +7,21 @@
 @* Новое приложене на Blazor *@
 
 <div class="d-flex flex-column">
-    @foreach (var pizza in State.Menu.Pizzas)
-    {
-        <div class="row h6">
-            <div class="col">
-                @pizza.Name
-            </div>
 
-            <div class="col">
-                @pizza.Price
-            </div>
-
-            <div class="col">
-                <img width="32" height="32" src="@SpicinessImage(pizza.Spiciness)" alt="@pizza.Spiciness" />
-            </div>
-
-            <div class="col">
-                <button class="btn btn-success" @onclick="@(() => AddToBasket(pizza))">Добавить в корзину</button>
-            </div>
+    <PizzaList Title="Our selected list of pizzas"
+               Menu="@State.Menu"
+               Selected="@((pizza) => AddToBasket(pizza))"/>
 
 
-        </div>
-    }
 </div>
 <!-- В корзине заказов-->
-@if (State.Basket.Orders.Any())
-{
-    <h1>Корзина заказа</h1>
-
-    @foreach (var (pizza, pos) in State.Basket.Orders.Select((id, pos) => (State.Menu.GetPizza(id), pos)))
-    {
-        <div class="row h6">
-            <div class="col">
-                @pizza.Name
-            </div>
-
-            <div class="col">
-                @pizza.Price
-            </div>
+<ShoppingBasket Title="Your current order"
+                Basket="@State.Basket"
+                GetPizzaFromId="@State.Menu.GetPizza"
+                Selected="@(pos => RemoveFromBasket(pos))" />
 
 
-            <div class="col">
-                <button class="btn btn-danger" @onclick="@(() => RemoveFromBasket(pos))">Удалить из корзины</button>
-            </div>
-
-
-        </div>
-    }
-}
-<!-- Итого -->
-<div class="row h4">
-    <div class="col">
-        Всего
-    </div>
-    <div class="col">
-        @State.TotalPrice
-    </div>
-    <div class="col"> </div>
-</div>
 <!-- Данные о клиенте -->
-
 
 <h1>Данные о клиенте</h1>
 <fieldset class="d-flex flex-column">
@@ -159,12 +114,14 @@
     {
         Console.WriteLine($"Added pizza to basket {pizza.Name}");
         State.Basket.Add(pizza.Id);
+        StateHasChanged();
     }
 
     private void RemoveFromBasket(int pos)
     {
         Console.WriteLine($"Removed pizza from basket at pos {pos}");
         State.Basket.Remove(pos);
+        StateHasChanged();
     }
 
     private void PlaceOrder()
