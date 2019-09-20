@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using PizzaSPA.Shared.Annotations;
 
 namespace PizzaSPA.Shared
 {
-    public class Customer : INotifyDataErrorInfo
+    public class Customer : INotifyDataErrorInfo, INotifyPropertyChanged
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -32,5 +34,12 @@ namespace PizzaSPA.Shared
         public bool HasErrors => GetErrors(string.Empty).Any();
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

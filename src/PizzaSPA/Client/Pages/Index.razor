@@ -1,7 +1,8 @@
 ﻿@page "/"
 @using System.ComponentModel.Design
 @using PizzaSPA.Shared
-
+@using PizzaSPA.Shared.Interfaces
+@inject IMenuService MenuService
 <h1>Магазин Пиццы</h1>
 
 @* Новое приложене на Blazor *@
@@ -81,8 +82,8 @@
 }
 
 
-@functions
-                                            {
+@code
+       {
     private bool debug =
 #if DEBUG
         true;
@@ -92,18 +93,13 @@
 
 
     private State State { get; } =
-        new State
-        {
-            Menu = new Menu
-            {
-                Pizzas = new List<Pizza>
-                {
-                                                                new Pizza(1, @"Пипперони", 500, Spiciness.Spicy),
-                                                                new Pizza(2, "Маргарита", 600, Spiciness.Hot),
-                                                                new Pizza(3, "Диабло", 700, Spiciness.Hot)
-                    }
-            }
-        };
+        new State();
+
+    protected override async Task OnInitializedAsync()
+    {
+        State.Menu = await MenuService.GetMenu();
+       State.Basket.Customer.PropertyChanged += (sender , e) => this.StateHasChanged();
+    }
 
     private string SpicinessImage(Spiciness spiciness)
     {
