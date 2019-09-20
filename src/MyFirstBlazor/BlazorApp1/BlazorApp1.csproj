@@ -5,7 +5,11 @@
     <OutputType>Exe</OutputType>
     <LangVersion>7.3</LangVersion>
     <RazorLangVersion>3.0</RazorLangVersion>
-    <!--FrameworkReference Include="Microsoft.AspNetCore.App" /-->
+ 
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <_RazorComponentInclude>Pages\**\*.cshtml</_RazorComponentInclude>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +18,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.0.0-preview9.19424.4" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.DevServer" Version="3.0.0-preview9.19424.4" PrivateAssets="all" />
     <!--<PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0-preview8.19405.4" />-->
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="3.0.0-preview9.19424.4" />
+    <!-->PackageReference Include="Microsoft.AspNetCore.Authorization" Version="3.0.0-preview9.19424.4" /-->
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.0.0-preview9.19424.4" />
+
+
+
+
   </ItemGroup>
 
 </Project>
