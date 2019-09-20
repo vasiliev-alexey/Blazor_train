@@ -8,8 +8,15 @@ namespace PizzaSPA.Shared
 {
     public class Customer : INotifyDataErrorInfo, INotifyPropertyChanged
     {
+        private string _name;
         public int Id { get; set; }
-        public string Name { get; set; }
+
+        public string Name
+        {
+            get => _name;
+            set { _name = value;  OnPropertyChanged();}
+        }
+
         public string Street { get; set; }
         public string City { get; set; }
 
