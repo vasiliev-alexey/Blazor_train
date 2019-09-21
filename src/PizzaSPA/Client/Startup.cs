@@ -9,7 +9,8 @@ namespace PizzaSPA.Client
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IMenuService, FixedMenuService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddSingleton<IMenuService, FixedMenuService>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)

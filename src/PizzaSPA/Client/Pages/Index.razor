@@ -3,6 +3,7 @@
 @using PizzaSPA.Shared
 @using PizzaSPA.Shared.Interfaces
 @inject IMenuService MenuService
+@inject IOrderService OrderService
 <h1>Магазин Пиццы</h1>
 
 @* Новое приложене на Blazor *@
@@ -98,7 +99,7 @@
     protected override async Task OnInitializedAsync()
     {
         State.Menu = await MenuService.GetMenu();
-       State.Basket.Customer.PropertyChanged += (sender , e) => this.StateHasChanged();
+        State.Basket.Customer.PropertyChanged += (sender , e) => this.StateHasChanged();
     }
 
     private string SpicinessImage(Spiciness spiciness)
@@ -120,9 +121,10 @@
         StateHasChanged();
     }
 
-    private void PlaceOrder()
+    private async void PlaceOrder()
     {
-        Console.WriteLine("Заказ размещен");
+      await  OrderService.PlaceOrder(State.Basket);
+        //Console.WriteLine("Заказ размещен");
 
     }
 
