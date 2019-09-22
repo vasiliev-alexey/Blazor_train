@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Pepperoni-DB",
+    "price": 8.99,
+    "spicyness": 1
+  },
+  {
+    "id": 2,
+    "name": "Margarita-DB",
+    "price": 7.99,
+    "spicyness": 0
+  },
+  {
+    "id": 3,
+    "name": "Diabolo",
+    "price": 9.99,
+    "spicyness": 2
+  }
+]

@@ -2,17 +2,18 @@
 {
     public class Pizza
     {
-        public Pizza(int id, string name, decimal price, Spiciness spiciness)
+        public Pizza(int id, string name,
+            decimal price, Spiciness spicyness)
         {
             Id = id;
             Name = name;
             Price = price;
-            Spiciness = spiciness;
+            Spicyness = spicyness;
         }
 
-        public int Id { get; }
-        public string Name { get; }
-        public decimal Price { get; }
-        public Spiciness Spiciness { get; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public Spiciness Spicyness { get; set; }
     }
 }
