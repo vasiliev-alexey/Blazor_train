@@ -2,6 +2,10 @@
 {
     public class Pizza
     {
+        public Pizza()
+        {
+        }
+
         public Pizza(int id, string name,
             decimal price, Spiciness spicyness)
         {
