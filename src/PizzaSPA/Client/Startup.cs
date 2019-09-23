@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using PizzaSPA.Client.Services;
 using PizzaSPA.Shared.Interfaces;
-using PizzaSPA.Shared.Services;
+ 
 
 namespace PizzaSPA.Client
 {

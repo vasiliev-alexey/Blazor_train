@@ -17,9 +17,23 @@ namespace PizzaSPA.Shared
             set { _name = value;  OnPropertyChanged();}
         }
 
-        public string Street { get; set; }
-        public string City { get; set; }
+        private string _street;
+        public string Street
+        {
+            get => _street;
+            set { _street = value; OnPropertyChanged(); }
+        }
+        private string _city;
+        public string City
+        {
+            get => _city;
+            set { _city = value; OnPropertyChanged(); }
+        }
 
+
+        public Order Order { get; set; }
+
+        #region others
         public IEnumerable GetErrors(string propertyName)
         {
             if (string.IsNullOrEmpty(propertyName) || propertyName == nameof(Name))
@@ -48,5 +62,9 @@ namespace PizzaSPA.Shared
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
+        #endregion
+
     }
 }

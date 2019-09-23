@@ -1,4 +1,6 @@
-﻿namespace PizzaSPA.Shared
+﻿using System.Collections.Generic;
+
+namespace PizzaSPA.Shared
 {
     public class Pizza
     {
@@ -19,5 +21,6 @@
         public string Name { get; set; }
         public decimal Price { get; set; }
         public Spiciness Spicyness { get; set; }
+        public List<PizzaOrder> PizzaOrders { get; set; }
     }
 }
