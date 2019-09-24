@@ -26,7 +26,8 @@ else
     {
         <PizzaItem Pizza="@pizza" ButtonTitle="Заказать"
                    ButtonClass="btn btn-success"
-                   Selected="@((p) => Selected(p))" />
+                   Selected="@((p) => Selected(p))" 
+                   ShowPizzaInformation="@ShowPizzaInformation" />
     }
 }
 
@@ -37,4 +38,8 @@ else
     public Menu Menu { get; set; }
     [Parameter]
     public Action<Pizza> Selected { get; set; }
+
+    [Parameter]
+    public Action<Pizza> ShowPizzaInformation { get; set; }
+
 }

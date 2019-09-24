@@ -4,6 +4,10 @@
 @using PizzaSPA.Shared.Interfaces
 @inject IMenuService MenuService
 @inject IOrderService OrderService
+@inject State State
+@inject NavigationManager _navigationManager
+
+
 <h1>Магазин Пиццы</h1>
 
 @* Новое приложене на Blazor *@
@@ -12,7 +16,9 @@
 
     <PizzaList Title="Our selected list of pizzas"
                Menu="@State.Menu"
-               Selected="@((pizza) => AddToBasket(pizza))"/>
+               Selected="@((pizza) => AddToBasket(pizza))" 
+               ShowPizzaInformation="@((pizza) => ShowPizzaInformation(pizza))"
+               />
 
 
 </div>
@@ -36,7 +42,7 @@
         <ul class="validation-error">
             @foreach (var error in State.Basket.Customer.GetErrors(nameof(Customer.Name)))
             {
-                    <li>@error></li>
+            <li>@error></li>
             }
         </ul>
         }
@@ -45,27 +51,27 @@
     <p>
         <label for="street">Улица:</label>
         <input id="street" @bind="@State.Basket.Customer.Street" />
-               @if (State.Basket.Customer.GetErrors(nameof(Customer.Street)).Any())
+        @if (State.Basket.Customer.GetErrors(nameof(Customer.Street)).Any())
                {
-                   <ul class="validation-error">
-                       @foreach (var error in State.Basket.Customer.GetErrors(nameof(Customer.Street)))
+        <ul class="validation-error">
+            @foreach (var error in State.Basket.Customer.GetErrors(nameof(Customer.Street)))
                        {
-                           <li>@error></li>
+            <li>@error></li>
                        }
-                   </ul>
+        </ul>
                }
     </p>
     <p>
         <label for="city">Город:</label>
         <input id="city" @bind="@State.Basket.Customer.City" />
-               @if (State.Basket.Customer.GetErrors(nameof(Customer.City)).Any())
+        @if (State.Basket.Customer.GetErrors(nameof(Customer.City)).Any())
                {
-                   <ul class="validation-error">
-                       @foreach (var error in State.Basket.Customer.GetErrors(nameof(Customer.City)))
+        <ul class="validation-error">
+            @foreach (var error in State.Basket.Customer.GetErrors(nameof(Customer.City)))
                        {
-                           <li>@error></li>
+            <li>@error></li>
                        }
-                   </ul>
+        </ul>
                }
     </p>
 
@@ -74,12 +80,12 @@
 
 @if (State.Basket.Orders.Any())
 {
-    <button class="btn btn-info" @onclick="@PlaceOrder">Разместить заказ</button>
+<button class="btn btn-info" @onclick="@PlaceOrder">Разместить заказ</button>
 }
 
 @if (debug)
 {
-    <p>@State.ToJson()</p>
+<p>@State.ToJson()</p>
 }
 
 
@@ -93,8 +99,7 @@
 #endif
 
 
-    private State State { get; } =
-        new State();
+   // private State State { get; } = new State();
 
     protected override async Task OnInitializedAsync()
     {
@@ -126,6 +131,13 @@
       await  OrderService.PlaceOrder(State.Basket);
         //Console.WriteLine("Заказ размещен");
 
+    }
+
+    private void ShowPizzaInformation(Pizza pizza)
+    {
+        State.CurrentPizza = pizza;
+     Console.WriteLine("Редирект");
+        _navigationManager.NavigateTo("/PizzaInfo");
     }
 
 }
